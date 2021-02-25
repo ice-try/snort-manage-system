@@ -1,0 +1,5 @@
+suricata -c suricata.yaml -r xxx.pcap -l log
+-c 后面接配置
+-r 读包
+-l 是日志目录
+yaml里配置 规则的路径
