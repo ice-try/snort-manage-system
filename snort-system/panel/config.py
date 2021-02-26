@@ -5,6 +5,45 @@ import os
 import ConfigParser
 
 
+def get_suricata_yaml_path():
+    """
+    :describe:  获得suricata配置文件存储路径
+    :param:     无
+    :return:    suricata配置文件存储路径
+    """
+    path = os.getcwd() + '/panel/config.ini'
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    yaml_path = cf.get('suricata', 'yaml_path')
+    return yaml_path
+
+
+def get_suricata_log_path():
+    """
+    :describe:  获得suricata日志存储路径
+    :param:     无
+    :return:    suricata日志存储路径
+    """
+    path = os.getcwd() + '/panel/config.ini'
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    log_path = cf.get('suricata', 'log_path')
+    return log_path
+
+
+def get_suricata_rule_path():
+    """
+    :describe:  获得suricata规则存储路径
+    :param:     无
+    :return:    suricata规则存储路径
+    """
+    path = os.getcwd() + '/panel/config.ini'
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    rule_path = cf.get('suricata', 'rule_path')
+    return rule_path
+
+
 def get_update_path():
     """
     :describe:  获得更新程序路径

@@ -5,7 +5,6 @@ from config import *
 from global_values import *
 from models import *
 
-
 import os
 import re
 import json
@@ -206,11 +205,51 @@ def db_to_file():
         complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
         # 开始写
         stor_path = get_stor_path()
+        print stor_path
         if not os.path.exists(stor_path):
             os.makedirs(stor_path)
         with open(stor_path + '/all.rules', 'a+') as f:
             f.write(complete_rule + '\n')
     Rule.objects.filter(contain='是').update(contain='否')
+
+
+def db_to_rule_file():
+    """
+    :describe:  将出库包含的规则写入文件
+    :param:     无
+    :return:    无
+    """
+    set_default_env()
+    rule_obj = Rule.objects.filter(contain='是')
+    for rule in rule_obj:
+        complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
+        # 开始写
+        stor_path = get_stor_path()
+        print stor_path
+        if not os.path.exists(stor_path):
+            os.makedirs(stor_path)
+        with open(os.path.join(stor_path, 'all.rules'), 'a+') as f:
+            f.write(complete_rule + '\n')
+    Rule.objects.filter(contain='是').update(contain='否')
+
+
+def db_to_rule_file():
+    """
+    :describe:  将出库包含的规则写入文件
+    :param:     无
+    :return:    无
+    """
+    set_default_env()
+    rule_obj = Rule.objects.filter()
+    print rule_obj
+    for rule in rule_obj:
+        complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
+        # 开始写
+        suricata_rule_path = get_suricata_rule_path()
+        if not os.path.exists(suricata_rule_path):
+            os.makedirs(suricata_rule_path)
+        with open(os.path.join(suricata_rule_path, 'all.rules'), 'a+') as f:
+            f.write(complete_rule + '\n')
 
 
 def extract_contain_feature():
@@ -226,8 +265,8 @@ def extract_contain_feature():
     if not os.path.exists(names_dir):
         os.makedirs(names_dir)
 
-    cmd = 'python ' + extract_path +\
-        ' --rule ' + rules_path \
+    cmd = 'python ' + extract_path + \
+          ' --rule ' + rules_path \
           + ' --out ' + out_names
     os.system(cmd)
 

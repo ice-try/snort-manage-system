@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
-import re
-import os
+from db import *
+from file_utils import *
 
 
 class GetHitRule(object):
@@ -9,7 +9,7 @@ class GetHitRule(object):
     """
 
     def __init__(self):
-        self.result_path = "/usr/suricata-4.0.0/log"
+        self.result_path = get_suricata_log_path()
         self.result = []
         self.tips = ""
         self.sid_list = []
@@ -84,6 +84,7 @@ class GetHitRule(object):
         """
         if not os.path.exists(self.result_path):
             get_file_cmd = 'mkdir -p ' + self.result_path
+            print get_file_cmd
             os.system(get_file_cmd)
 
     def del_result_file(self):
@@ -96,15 +97,25 @@ class GetHitRule(object):
         os.system(cmd)
 
 
+def get_suricata_rules():
+    suricata_rule_path = get_suricata_rule_path()
+    cmd = 'rm -rf ' + suricata_rule_path
+    os.system(cmd)
+    db_to_rule_file()
+
+
 def check_pcap_rules(pcap_path):
     """
     :describe:  调用检测工具,获取结果
     :param:     上传的pcap文件路径
     :return:    无
     """
+    get_suricata_rules()
     # cmd = './tool/test_tool ./all.rules ' + pcap_path + ' > ./result'
-    cmd = 'suricata -c /usr/suricata-4.0.0/suricata.yaml -r ' + pcap_path + ' -l /usr/suricata-4.0.0/log'
-    os.system(cmd)
+    suricata_log_path = get_suricata_log_path()
+    test_dir_exists(suricata_log_path)
+    yaml_path = get_suricata_yaml_path()
+    cmd = 'suricata -c ' + yaml_path + ' -r ' + pcap_path + ' -l ' + suricata_log_path
 
 
 def upload_pcap_hit_rule(request):
