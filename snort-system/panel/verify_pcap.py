@@ -116,6 +116,7 @@ def check_pcap_rules(pcap_path):
     test_dir_exists(suricata_log_path)
     yaml_path = get_suricata_yaml_path()
     cmd = 'suricata -c ' + yaml_path + ' -r ' + pcap_path + ' -l ' + suricata_log_path
+    os.system(cmd)
 
 
 def upload_pcap_hit_rule(request):
