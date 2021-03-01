@@ -5,7 +5,7 @@ import zipfile
 from config import *
 from models import *
 from global_values import *
-from django.http import StreamingHttpResponse
+from django.http import StreamingHttpResponse, HttpResponse
 
 
 def get_custom_export_rule(id_list):

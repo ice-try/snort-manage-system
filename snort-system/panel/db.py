@@ -220,17 +220,15 @@ def db_to_rule_file():
     :return:    无
     """
     set_default_env()
-    rule_obj = Rule.objects.filter(contain='是')
+    rule_obj = Rule.objects.filter()
     for rule in rule_obj:
         complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
         # 开始写
-        stor_path = get_stor_path()
-        print stor_path
-        if not os.path.exists(stor_path):
-            os.makedirs(stor_path)
-        with open(os.path.join(stor_path, 'all.rules'), 'a+') as f:
+        suricata_rule_path = get_suricata_rule_path()
+        if not os.path.exists(suricata_rule_path):
+            os.makedirs(suricata_rule_path)
+        with open(os.path.join(suricata_rule_path, 'all.rules'), 'a+') as f:
             f.write(complete_rule + '\n')
-    Rule.objects.filter(contain='是').update(contain='否')
 
 
 def db_to_rule_file():

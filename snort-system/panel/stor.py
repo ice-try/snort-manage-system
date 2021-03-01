@@ -46,6 +46,7 @@ def generate_zip():
     """
     file_list = []
     path = get_download_path()
+
     for root, dirs, files in os.walk(path, topdown=False):
         for name in files:
             if not name.endswith('.py') \
