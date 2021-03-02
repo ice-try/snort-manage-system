@@ -135,12 +135,13 @@ def upload_pcap_hit_rule(request):
     if not str(myFile).endswith('.pcap'):
         return_str = "文件格式错误"
         return return_str, ""
-
-    destination = open(os.path.join('./pcap_file/', myFile.name), 'wb+')
+    upload_pcap_path = get_upload_path()
+    test_dir_exists(upload_pcap_path)
+    destination = open(os.path.join(upload_pcap_path, myFile.name), 'wb+')
 
     for chunk in myFile.chunks():
         destination.write(chunk)
     destination.close()
 
-    pcap_path = './pcap_file/' + myFile.name
+    pcap_path = upload_pcap_path + myFile.name
     return return_str, pcap_path

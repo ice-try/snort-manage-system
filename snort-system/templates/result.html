@@ -86,7 +86,7 @@
          <th nowrap="nowrap" class="table-type" style="color: green">修订版本</th> 
          <th nowrap="nowrap" class="table-date am-hide-sm-only" style="color: green">创建时间</th> 
          <th nowrap="nowrap" class="table-set" style="color: green">修改时间</th> 
-         <th nowrap="nowrap" class="table-check" style="color: green">检测</th> 
+{#         <th nowrap="nowrap" class="table-check" style="color: green">检测</th> #}
          <th nowrap="nowrap" class="table-download" style="color: green">下载</th> 
          <th nowrap="nowrap" class="table-delete" style="color: green">删除</th> 
          <th nowrap="nowrap" class="table-detail" style="color: green">详情</th> 
@@ -104,7 +104,7 @@
          <td width="100px">{{rule.rev}}</td> 
          <td width="160px">{{rule.create_time}}</td> 
          <td>{{rule.update_time}}</td> 
-         <td nowrap="nowrap" width="50px"> <a href="javascript:void(0)" onclick="check_rule('规则检测',5,'{{rule.sid}}')">检测</a> </td> 
+         <td nowrap="nowrap" width="50px"> <a href="javascript:void(0)" onclick="check_rule('规则',5,'{{rule.sid}}')">检测</a> </td>
          <td> <a href="javascript:void(0)" onclick="download_pcap('pcap下载',5, '{{rule.sid}}')">下载</a> </td> 
          <td> <a href="javascript:void(0)" onclick="delete_pcap('pcap删除',5, '{{rule.sid}}')">删除</a> </td> 
          <td> <a href="javascript:void(0)" onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{rule.sid}}')">查看</a> </td> 

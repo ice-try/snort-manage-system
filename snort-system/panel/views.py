@@ -901,6 +901,8 @@ def upload_pcap(request, checked_rule):
     pcap_path = get_upload_path() + str(myFile)
 
     path = get_upload_path()
+    if not os.path.exists(path):
+        os.makedirs(path)
     destination = open(os.path.join(path, myFile.name), 'wb+')
     for chunk in myFile.chunks():
         destination.write(chunk)
