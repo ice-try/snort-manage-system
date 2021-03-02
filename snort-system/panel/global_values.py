@@ -46,6 +46,7 @@ class Values(object):
     rule_pcap = None
     del_id = None
     pcap = ""
+    rules = ""
     content_list = []
     history_log = None
     date_range = ""
@@ -91,6 +92,10 @@ def set_content_list(list):
 
 def set_pcap(pcap):
     Values.pcap = pcap
+
+
+def set_rules(rules):
+    Values.rules = rules
 
 
 def set_del_id(id):
@@ -291,6 +296,10 @@ def get_del_id():
 
 def get_pcap():
     return Values.pcap
+
+
+def get_rules():
+    return Values.rules
 
 
 def get_content_list():

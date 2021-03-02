@@ -285,7 +285,38 @@
                 )
 
             }
-        </script> 
+        </script>
+  <script type="text/javascript">
+    function delete_rules(title, id, sid) {
+        $.ajax({
+            url: "/backstage/delete/rules",
+            type: "POST",
+            data: {
+                'sid': sid,
+                'csrfmiddlewaretoken': '{{csrf_token}}'
+            },
+            success: function (data) {
+                if (data == 1) {
+                    alert("删除成功")
+                }
+                else
+                    alert("删除失败!!!")
+            },
+            error: function () {
+                alert("异常");
+            }
+        })
+    }
+</script>
+<script type="text/javascript">
+    function delete_confirm() {
+        if (confirm("是否删除？")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
   <script type="text/javascript">
             //页面加载的时候,所有的复选框都是未选中的状态
             function checkOrCancelAll(){

@@ -1082,6 +1082,31 @@ def pcap_delete(request):
 
 
 @csrf_exempt
+def rules_delete(request):
+    """
+    :describe:  规则删除
+    :param:     http请求
+    :return:    响应状态: 成功 失败
+    """
+    sid = request.POST.get('sid')
+    print "调用rules_delete方法"
+
+    if sid is not None:
+        set_del_id(sid)
+
+    yid = Rule.objects.get(sid=sid)
+    print "sid:" + str(sid)
+
+    if yid is not None:
+        Rule.objects.filter(sid=sid).delete()
+        print "该规则删除成功"
+        return HttpResponse(1)
+    else:
+        print "该规则不存在"
+        return HttpResponse(0)
+
+
+@csrf_exempt
 def translate_show(request):
     """
     :describe:  获取要翻译的规则ID
