@@ -110,8 +110,9 @@
          <td width="160px">{{rule.create_time}}</td> 
          <td>{{rule.update_time}}</td> 
          <td nowrap="nowrap" width="50px"> <a href="javascript:void(0)" onclick="check_rule('规则检测',5,'{{rule.sid}}')">检测</a> </td> 
-         <td> <a href="javascript:void(0)" onclick="download_pcap('pcap下载',5, '{{rule.sid}}')">下载</a> </td> 
-         <td> <a href="javascript:void(0)" onclick="delete_pcap('pcap删除',5, '{{rule.sid}}')">删除</a> </td> 
+         <td> <a href="javascript:void(0)" onclick="download_pcap('pcap下载',5, '{{rule.sid}}')">下载</a> </td>
+            <td><a href="javascript:delete_rules('规则删除',5, '{{ rule.sid }}')" onclick="return delete_confirm()">删除规则</a> </td>
+            <td><a href="javascript:void(0)" onclick="delete_pcap('pcap删除',5, '{{ rule.sid }}')">删除pcap</a> </td>
          <td> <a href="javascript:void(0)" onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{rule.sid}}')">查看</a> </td> 
          <td> <a href="javascript:void(0)" onclick="view_complete('完整规则 '+'ID: '+'{{rule.sid}}',5,'{{rule.sid}}')">预览</a> </td> 
         </tr> {% endfor %} 
