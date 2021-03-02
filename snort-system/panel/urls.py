@@ -1,8 +1,9 @@
+# coding=utf-8
 from django.conf.urls import patterns, url
 from django.contrib import admin
 from views import *
 
-#待修改
+# 待修改
 urlpatterns = patterns(
     '',
     url(r'^$', register, name='register'),
