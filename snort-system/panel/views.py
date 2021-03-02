@@ -413,7 +413,7 @@ def backstage(request):
         user_now = request.session['user_name']
     except Exception as e:
         print 'login error:', e
-        return HttpResponse('错误: 请访问http://192.168.18.182:8000/登陆!')
+        return HttpResponse('错误: 请退出重新登陆!')
     return render_to_response('backstage.html', {'user': user_now})
 
 

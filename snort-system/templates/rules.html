@@ -1,292 +1,348 @@
 <html>
- <head></head>
- <body>
-  {% load staticfiles %}    
-  <meta charset="UTF-8" /> 
-  <title></title> 
-  <link rel="stylesheet" href="{% static 'css/amazeui.min.css' %}" /> 
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}" /> 
-  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" /> 
-  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" /> 
-  <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script> 
-  <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
-  <!-- 添加时间搜索 --> 
-  <meta name="renderer" content="webkit" /> 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
-  <meta name="apple-mobile-web-app-capable" content="yes" /> 
-  <meta name="format-detection" content="telephone=no" /> 
-  <style>
-            body{padding: 20px;}
-            .demo-input{padding-left: 10px; height: 34px; min-width: 285px; line-height: 38px; border: 1px solid #e6e6e6;  background-color: #fff;  border-radius: 2px;}
-            .demo-footer{padding: 50px 0; color: #999; font-size: 14px;}
-            .demo-footer a{padding: 0 5px; color: #01AAED;}
+<head></head>
+<body>
+{% load staticfiles %}
+<meta charset="UTF-8"/>
+<title></title>
+<link rel="stylesheet" href="{% static 'css/amazeui.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/admin.css' %}"/>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<!-- 添加时间搜索 -->
+<meta name="renderer" content="webkit"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="format-detection" content="telephone=no"/>
+<style>
+    body {
+        padding: 20px;
+    }
+
+    .demo-input {
+        padding-left: 10px;
+        height: 34px;
+        min-width: 285px;
+        line-height: 38px;
+        border: 1px solid #e6e6e6;
+        background-color: #fff;
+        border-radius: 2px;
+    }
+
+    .demo-footer {
+        padding: 50px 0;
+        color: #999;
+        font-size: 14px;
+    }
+
+    .demo-footer a {
+        padding: 0 5px;
+        color: #01AAED;
+    }
 
 
-            /*#div1 {width: 600px; background: lightblue; margin: 0 auto;line-height: 26px;}
-    a {text-decoration: none;color: red;}*/
-        </style> 
-  <!-- end时间搜索 -->   
-  <div class="admin-content-body"> 
-   <div class="am-cf am-padding am-padding-bottom-0"> 
-    <div class="am-fl am-cf">
-     <strong class="am-text-primary am-text-lg"></strong>特征概要
-     <small></small>
-    </div> 
-   </div> 
-   <p> </p> 
-   <hr /> 
-   <div class="am-g"> 
-    <div class="am-u-sm-12 am-u-md-6"> 
-     <div class="am-btn-toolbar"> 
-      <div class="am-btn-group am-btn-group-xs"> 
-       <button type="button" class="am-btn am-btn-default" onclick="add('新增规则',5)"><span class="am-icon-plus"></span> 新增</button> 
-      </div>  
-      <div class="am-btn-group am-btn-group-xs"> 
-       <button type="button" class="am-btn am-btn-default" id="shield_id" onclick="shield()"><span class="am-icon-close"></span> 屏蔽</button> 
-      </div>
-      <!-- 本地导入 -->
-      <div class="am-btn-group am-btn-group-xs"> 
-       <button type="button" class="am-btn am-btn-default" id="out_id" onclick="local_in('上传本地规则',5)"><span class="am-icon-upload"></span> 导入</button>
-      </div>
-      <!-- 本地倒入end -->
-      <div class="am-btn-group am-btn-group-xs"> 
-       <button type="button" class="am-btn am-btn-default" id="out_id" onclick="out()"><span class="am-icon-download"></span> 导出</button>
-      </div>
-      <div class="am-btn-group am-btn-group-xs"> 
-       <button type="button" class="am-btn am-btn-default" onclick="pcap_entry('查找命中的规则',5)"><span class="am-icon-upload"></span> pcap验证</button>
-      </div>
-     </div> 
-    </div> 
-    <div class="am-u-sm-12 am-u-md-3"> 
-     <div> 
-      <select style="float: left;  height: 34px;" id="options"> 
-        <option value="时间范围">时间范围</option> 
-        <option value="sid">sid</option> 
-        <option value="msg">msg</option> 
-        <option value="class_type">class_type</option> 
-        <option value="malname">malname</option> 
-      </select>
-      <input type="text" class="demo-input" placeholder="请选择时间范围" id="test10" />  
-     </div> 
-     <div class="am-input-group am-input-group-sm"> 
-      <input type="text" class="am-form-field" id="search-data" /> 
-      <span class="am-input-group-btn"> <button class="am-btn am-btn-default" type="button" onclick="search()">搜索<span class="am-icon-search"></span></button> </span> 
-     </div> 
-    </div> 
-   </div> 
-   
-   <div class="am-g"> 
-    <div class="am-u-sm-12"> 
-     <form class="am-form"> 
-      <table class="am-table am-table-striped am-table-hover table-main"> 
-       <thead> 
-        <tr> 
-         <th nowrap="nowrap" class="table-check"><input type="checkbox" name="checkbox" id="all" onclick="checkOrCancelAll();" /><span id="mySpan">全选</span></th> 
-         <th nowrap="nowrap" class="table-id" style="color: green">ID</th> 
-         <th nowrap="nowrap" class="table-title" style="color: green">描述信息</th> 
-         <th nowrap="nowrap" class="table-author am-hide-sm-only" style="color: green">类型</th> 
-         <th nowrap="nowrap" class="table-type" style="color: green">恶意家族</th> 
-         <th nowrap="nowrap" class="table-type" style="color: green">修订版本</th> 
-         <th nowrap="nowrap" class="table-date am-hide-sm-only" style="color: green">创建时间</th> 
-         <th nowrap="nowrap" class="table-set" style="color: green">修改时间</th> 
-         <th nowrap="nowrap" class="table-check" style="color: green">检测</th> 
-         <th nowrap="nowrap" class="table-download" style="color: green">下载</th> 
-         <th nowrap="nowrap" class="table-delete" style="color: green">删除</th> 
-         <th nowrap="nowrap" class="table-detail" style="color: green">详情</th> 
-         <th nowrap="nowrap" class="table-detail" style="color: green">完整规则</th>
-        </tr> 
-       </thead> 
-       <tbody>
-         {% for rule in rules_sections %} 
-        <tr> 
-         <td nowrap="nowrap" width="60"><input  type="checkbox" name="checkbox" id="ckb" value="{{rule.id}}" /></td> 
-         <td width="80">{{rule.sid}}</td> 
-         <td width="420px">{{rule.msg}}</td> 
-         <td width="150px">{{rule.class_type}}</td> 
-         <td width="220px">{{rule.malname}}</td> 
-         <td width="100px">{{rule.rev}}</td> 
-         <td width="160px">{{rule.create_time}}</td> 
-         <td>{{rule.update_time}}</td> 
-         <td nowrap="nowrap" width="50px"> <a href="javascript:void(0)" onclick="check_rule('规则检测',5,'{{rule.sid}}')">检测</a> </td> 
-         <td> <a href="javascript:void(0)" onclick="download_pcap('pcap下载',5, '{{rule.sid}}')">下载</a> </td>
-            <td><a href="javascript:delete_rules('规则删除',5, '{{ rule.sid }}')" onclick="return delete_confirm()">删除规则</a> </td>
-            <td><a href="javascript:void(0)" onclick="delete_pcap('pcap删除',5, '{{ rule.sid }}')">删除pcap</a> </td>
-         <td> <a href="javascript:void(0)" onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{rule.sid}}')">查看</a> </td> 
-         <td> <a href="javascript:void(0)" onclick="view_complete('完整规则 '+'ID: '+'{{rule.sid}}',5,'{{rule.sid}}')">预览</a> </td> 
-        </tr> {% endfor %} 
-       </tbody> 
-      </table> 
-      <hr /> 
-      <!-- 分页开始 --> 
-      <div> 
-       <ul class="pagination"> 
-        <li><a href="/backstage/rules/?page=1">首页</a></li> {% if rules_sections.has_previous %} 
-        <li><a href="/backstage/rules/?page={{ rules_sections.previous_page_number }}">上一页</a></li> {% endif %} 
-        <li class=" "><span>第{{ rules_sections.number }}页 | 共{{ paginator.num_pages}}页</span></li> {% if rules_sections.has_next %} 
-        <li><a href="/backstage/rules/?page={{ rules_sections.next_page_number }}">下一页</a></li> {% endif %} 
-        <li><a href="/backstage/rules/?page={{ rules_sections.paginator.num_pages }}">尾页</a></li> 
-       </ul> 
-      </div> 
-      <!-- 分页结束 --> 
-     </form> 
-    </div> 
-   </div> 
-  </div>  
-  <script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script> 
-  <script type="text/javascript" src="{% static 'myplugs/js/plugs.js' %}"></script> 
-  <script type="text/javascript">
-    function sleep(d){
-                for(var t = Date.now();Date.now() - t <= d;);
-              }
-  </script>
-  <script type="text/javascript">
-            function view(title,id,sid){
-                detail(sid)
-                sleep(200); 
-                $.jq_Panel({
-                title: title,
-                iframeWidth: 550,
-                iframeHeight: 620,
-                url: "detail"
-            })
-            }
-        </script> 
-  <script type="text/javascript">
-            function detail(sid){
-                $.post("/backstage/rules/detail",{'sid':sid,'csrfmiddlewaretoken':'{{csrf_token}}' } , function(){
-            });
-            }
-        </script> 
-  <script type="text/javascript">
-            function view_complete(title,id,sid){
-                get_complete_rule(sid)
-                sleep(200); 
-                $.jq_Panel({
-                title: title,
-                iframeWidth: 500,
-                iframeHeight: 200,
-                url: "complete"
-            })
-            }
-        </script> 
-  <script type="text/javascript">
-            function get_complete_rule(sid){
-                $.post("/backstage/rules/complete",{'sid':sid,'csrfmiddlewaretoken':'{{csrf_token}}' } , function(){
-            });
-            }
-        </script> 
-  <script type="text/javascript">
-            function search(){
-                var txt = $(".am-form-field").val();
-                var date_data=document.getElementById("test10");
-                date_range = date_data.value
-                // alert(date_data.value)
-                var myselect=document.getElementById("options");
-                var index=myselect.selectedIndex;
-                var value = myselect.options[index].value;
-                $.post("/backstage/rules/search",{'search_data':txt,'option':value, 'date_range':date_range, 'csrfmiddlewaretoken':'{{csrf_token}}' } , function(data){
-                    if(data==1){
-                        location.replace("/backstage/rules/result")
-                    }else{
-                        location.replace("/backstage/rules")
-                    }
-                });
-            }
-        </script> 
-  <script type="text/javascript">
-            function add(title,id){
-                $.jq_Panel({
-                title: title,
-                iframeWidth: 430,
-                iframeHeight: 450,
-                url: "add"
-            })
-            }
-        </script> 
-  <script type="text/javascript">
-            function shield_rule(id){
-                // alert(id)
-                $.post("/backstage/rules/shield",{'id': id, 'csrfmiddlewaretoken':'{{csrf_token}}' } , function(data){
-                    if(data==1){
-                        alert('第' + id + '条规则屏蔽成功!')
-                    }else{
-                        alert('第' + id + '条屏蔽失败!')
-                    }
-            });
-            }
-        </script> 
-  <script type="text/javascript">
-            $("#shield_id").click(function(){
-              flag = false
-                $.each($('input:checkbox'),function(){
-                    if(this.checked){
-                        id = $(this).val()
-                        shield_rule(id)
-                        flag = true
-                    }
-                });
-              if(flag==false){
-                alert('未选中任何规则!')
-              }
-            });
-        </script> 
-  <script type="text/javascript">
-            function download_pcap(title,id,sid){
-                $.jq_Panel({
-                      title: title,
-                      iframeWidth: 400,
-                      iframeHeight: 100,
-                      url: "/backstage/download_pcap"
-                });
-                $.post("/backstage/download/pcap",
-                    {
-                        'sid': sid,
-                        'csrfmiddlewaretoken': '{{csrf_token}}',
-                    }
-                )
-            }
-        </script> 
-  <script type="text/javascript">
-            function check_rule(title,id,sid){
-                // 400 100
-                $.jq_Panel({
-                      title: title,
-                      iframeWidth: 400,
-                      iframeHeight: 100,
-                      url: "/backstage/upload"
-                });
+    /*#div1 {width: 600px; background: lightblue; margin: 0 auto;line-height: 26px;}
+a {text-decoration: none;color: red;}*/
+</style>
+<!-- end时间搜索 -->
+<div class="admin-content-body">
+    <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf">
+            <strong class="am-text-primary am-text-lg"></strong>特征概要
+            <small></small>
+        </div>
+    </div>
+    <p></p>
+    <hr/>
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6">
+            <div class="am-btn-toolbar">
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default" onclick="add('新增规则',5)"><span
+                            class="am-icon-plus"></span> 新增
+                    </button>
+                </div>
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default" id="shield_id" onclick="shield()"><span
+                            class="am-icon-close"></span> 屏蔽
+                    </button>
+                </div>
+                <!-- 本地导入 -->
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default" id="out_id" onclick="local_in('上传本地规则',5)"><span
+                            class="am-icon-upload"></span> 导入
+                    </button>
+                </div>
+                <!-- 本地倒入end -->
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default" id="out_id" onclick="out()"><span
+                            class="am-icon-download"></span> 导出
+                    </button>
+                </div>
+                <div class="am-btn-group am-btn-group-xs">
+                    <button type="button" class="am-btn am-btn-default" onclick="pcap_entry('查找命中的规则',5)"><span
+                            class="am-icon-upload"></span> pcap验证
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="am-u-sm-12 am-u-md-3">
+            <div>
+                <select style="float: left;  height: 34px;" id="options">
+                    <option value="时间范围">时间范围</option>
+                    <option value="sid">sid</option>
+                    <option value="msg">msg</option>
+                    <option value="class_type">class_type</option>
+                    <option value="malname">malname</option>
+                </select>
+                <input type="text" class="demo-input" placeholder="请选择时间范围" id="test10"/>
+            </div>
+            <div class="am-input-group am-input-group-sm">
+                <input type="text" class="am-form-field" id="search-data"/>
+                <span class="am-input-group-btn"> <button class="am-btn am-btn-default" type="button"
+                                                          onclick="search()">搜索<span
+                        class="am-icon-search"></span></button> </span>
+            </div>
+        </div>
+    </div>
 
-                $.post("/backstage/upload/file",
-                    {
-                        'sid': sid,
-                        'csrfmiddlewaretoken': '{{csrf_token}}',
-                    }
-                )
-
+    <div class="am-g">
+        <div class="am-u-sm-12">
+            <form class="am-form">
+                <table class="am-table am-table-striped am-table-hover table-main">
+                    <thead>
+                    <tr>
+                        <th nowrap="nowrap" class="table-check"><input type="checkbox" name="checkbox" id="all"
+                                                                       onclick="checkOrCancelAll();"/><span id="mySpan">全选</span>
+                        </th>
+                        <th nowrap="nowrap" class="table-id" style="color: green">ID</th>
+                        <th nowrap="nowrap" class="table-title" style="color: green">描述信息</th>
+                        <th nowrap="nowrap" class="table-author am-hide-sm-only" style="color: green">类型</th>
+                        <th nowrap="nowrap" class="table-type" style="color: green">恶意家族</th>
+                        <th nowrap="nowrap" class="table-type" style="color: green">修订版本</th>
+                        <th nowrap="nowrap" class="table-date am-hide-sm-only" style="color: green">创建时间</th>
+                        <th nowrap="nowrap" class="table-set" style="color: green">修改时间</th>
+                        <th nowrap="nowrap" class="table-download" style="color: green">下载</th>
+                        <th nowrap="nowrap" class="table-delete" style="color: green">删除规则</th>
+                        <th nowrap="nowrap" class="table-delete" style="color: green">删除pcap</th>
+                        <th nowrap="nowrap" class="table-detail" style="color: green">详情</th>
+                        <th nowrap="nowrap" class="table-detail" style="color: green">完整规则</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rule in rules_sections %}
+                        <tr>
+                            <td nowrap="nowrap" width="60"><input type="checkbox" name="checkbox" id="ckb"
+                                                                  value="{{ rule.id }}"/></td>
+                            <td width="80">{{ rule.sid }}</td>
+                            <td width="420px">{{ rule.msg }}</td>
+                            <td width="150px">{{ rule.class_type }}</td>
+                            <td width="220px">{{ rule.malname }}</td>
+                            <td width="100px">{{ rule.rev }}</td>
+                            <td width="160px">{{ rule.create_time }}</td>
+                            <td>{{ rule.update_time }}</td>
+                            <td nowrap="nowrap" width="50px"><a href="javascript:void(0)"
+                                   onclick="check_rule('规则检测',5,'{{ rule.sid }}')">检测</a> </td>
+                            <td><a href="javascript:void(0)"
+                                   onclick="download_pcap('pcap下载',5, '{{ rule.sid }}')">下载</a></td>
+                            <td><a href="javascript:delete_rules('规则删除',5, '{{ rule.sid }}')"
+                                   onclick="return delete_confirm()">删除规则</a></td>
+                            <td><a href="javascript:void(0)"
+                                   onclick="delete_pcap('pcap删除',5, '{{ rule.sid }}')">删除pcap</a></td>
+                            <td><a href="javascript:void(0)"
+                                   onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{ rule.sid }}')">查看</a></td>
+                            <td><a href="javascript:void(0)"
+                                   onclick="view_complete('完整规则 '+'ID: '+'{{ rule.sid }}',5,'{{ rule.sid }}')">预览</a>
+                            </td>
+                        </tr> {% endfor %}
+                    </tbody>
+                </table>
+                <hr/>
+                <!-- 分页开始 -->
+                <div>
+                    <ul class="pagination">
+                        <li><a href="/backstage/rules/?page=1">首页</a></li> {% if rules_sections.has_previous %}
+                        <li><a href="/backstage/rules/?page={{ rules_sections.previous_page_number }}">上一页</a>
+                        </li> {% endif %}
+                        <li class=" "><span>第{{ rules_sections.number }}页 | 共{{ paginator.num_pages }}页</span></li>
+                        {% if rules_sections.has_next %}
+                            <li><a href="/backstage/rules/?page={{ rules_sections.next_page_number }}">下一页</a>
+                            </li> {% endif %}
+                        <li><a href="/backstage/rules/?page={{ rules_sections.paginator.num_pages }}">尾页</a></li>
+                    </ul>
+                </div>
+                <!-- 分页结束 -->
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'myplugs/js/plugs.js' %}"></script>
+<script type="text/javascript">
+    function sleep(d) {
+        for (var t = Date.now(); Date.now() - t <= d;) ;
+    }
+</script>
+<script type="text/javascript">
+    function view(title, id, sid) {
+        detail(sid)
+        sleep(200);
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 550,
+            iframeHeight: 620,
+            url: "detail"
+        })
+    }
+</script>
+<script type="text/javascript">
+    function detail(sid) {
+        $.post("/backstage/rules/detail", {
+            'sid': sid,
+            'csrfmiddlewaretoken': '{{csrf_token}}'
+        }, function () {
+        });
+    }
+</script>
+<script type="text/javascript">
+    function view_complete(title, id, sid) {
+        get_complete_rule(sid)
+        sleep(200);
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 500,
+            iframeHeight: 200,
+            url: "complete"
+        })
+    }
+</script>
+<script type="text/javascript">
+    function get_complete_rule(sid) {
+        $.post("/backstage/rules/complete", {
+            'sid': sid,
+            'csrfmiddlewaretoken': '{{csrf_token}}'
+        }, function () {
+        });
+    }
+</script>
+<script type="text/javascript">
+    function search() {
+        var txt = $(".am-form-field").val();
+        var date_data = document.getElementById("test10");
+        date_range = date_data.value
+        // alert(date_data.value)
+        var myselect = document.getElementById("options");
+        var index = myselect.selectedIndex;
+        var value = myselect.options[index].value;
+        $.post("/backstage/rules/search", {
+            'search_data': txt,
+            'option': value,
+            'date_range': date_range,
+            'csrfmiddlewaretoken': '{{csrf_token}}'
+        }, function (data) {
+            if (data == 1) {
+                location.replace("/backstage/rules/result")
+            } else {
+                location.replace("/backstage/rules")
             }
-        </script> 
-  <script type="text/javascript">
-            function delete_pcap(title,id,sid){
-
-                $.jq_Panel({
-                      title: title,
-                      iframeWidth: 400,
-                      iframeHeight: 100,
-                      url: "/backstage/delete_pcap"
-                });
-
-                $.post("/backstage/delete/pcap",
-                    {
-                        'sid': sid,
-                        'csrfmiddlewaretoken': '{{csrf_token}}',
-                    }
-                )
-
+        });
+    }
+</script>
+<script type="text/javascript">
+    function add(title, id) {
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 430,
+            iframeHeight: 450,
+            url: "add"
+        })
+    }
+</script>
+<script type="text/javascript">
+    function shield_rule(id) {
+        // alert(id)
+        $.post("/backstage/rules/shield", {'id': id, 'csrfmiddlewaretoken': '{{csrf_token}}'}, function (data) {
+            if (data == 1) {
+                alert('第' + id + '条规则屏蔽成功!')
+            } else {
+                alert('第' + id + '条屏蔽失败!')
             }
-        </script>
-  <script type="text/javascript">
+        });
+    }
+</script>
+<script type="text/javascript">
+    $("#shield_id").click(function () {
+        flag = false
+        $.each($('input:checkbox'), function () {
+            if (this.checked) {
+                id = $(this).val()
+                shield_rule(id)
+                flag = true
+            }
+        });
+        if (flag == false) {
+            alert('未选中任何规则!')
+        }
+    });
+</script>
+<script type="text/javascript">
+    function download_pcap(title, id, sid) {
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 400,
+            iframeHeight: 100,
+            url: "/backstage/download_pcap"
+        });
+        $.post("/backstage/download/pcap",
+            {
+                'sid': sid,
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            }
+        )
+    }
+</script>
+<script type="text/javascript">
+    function check_rule(title, id, sid) {
+        // 400 100
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 400,
+            iframeHeight: 100,
+            url: "/backstage/upload"
+        });
+
+        $.post("/backstage/upload/file",
+            {
+                'sid': sid,
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            }
+        )
+
+    }
+</script>
+<script type="text/javascript">
+    function delete_pcap(title, id, sid) {
+
+        $.jq_Panel({
+            title: title,
+            iframeWidth: 400,
+            iframeHeight: 100,
+            url: "/backstage/delete_pcap"
+        });
+
+        $.post("/backstage/delete/pcap",
+            {
+                'sid': sid,
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            }
+        )
+
+    }
+</script>
+<script type="text/javascript">
     function delete_rules(title, id, sid) {
         $.ajax({
             url: "/backstage/delete/rules",
@@ -298,8 +354,8 @@
             success: function (data) {
                 if (data == 1) {
                     alert("删除成功")
-                }
-                else
+                    {#    重新获取列表信息#}
+                } else
                     alert("删除失败!!!")
             },
             error: function () {
@@ -317,60 +373,61 @@
         }
     }
 </script>
-  <script type="text/javascript">
-            //页面加载的时候,所有的复选框都是未选中的状态
-            function checkOrCancelAll(){
-                //1.获取checkbo的元素对象
-                var chElt=document.getElementById("all");
-                //2.获取选中状态
-                var checkedElt=chElt.checked;
-                //3.若checked=true,将所有的复选框选中,checked=false,将所有的复选框取消
-                var allCheck=document.getElementsByName("checkbox");
-                //4.循环遍历取出每一个复选框中的元素
-                var mySpan=document.getElementById("mySpan");
-                // alert(mySpan)
-                if(checkedElt){
-                    //全选
-                    for(var i=0;i<allCheck.length;i++){
-                    //设置复选框的选中状态
-                        allCheck[i].checked=true;
-                    }
-                    mySpan.innerHTML="取消";
-                }else{
-                    //取消全选
-                    for(var i=0;i<allCheck.length;i++){
-                        allCheck[i].checked=false;
-                    }
-                mySpan.innerHTML="全选";
-                }
+<script type="text/javascript">
+    //页面加载的时候,所有的复选框都是未选中的状态
+    function checkOrCancelAll() {
+        //1.获取checkbo的元素对象
+        var chElt = document.getElementById("all");
+        //2.获取选中状态
+        var checkedElt = chElt.checked;
+        //3.若checked=true,将所有的复选框选中,checked=false,将所有的复选框取消
+        var allCheck = document.getElementsByName("checkbox");
+        //4.循环遍历取出每一个复选框中的元素
+        var mySpan = document.getElementById("mySpan");
+        // alert(mySpan)
+        if (checkedElt) {
+            //全选
+            for (var i = 0; i < allCheck.length; i++) {
+                //设置复选框的选中状态
+                allCheck[i].checked = true;
             }
-        </script> 
-  <script type="text/javascript">
-            document.onkeydown=keyListener;
-            function keyListener(e){
-                // 当按下回车键，执行我们的代码
-                if(e.keyCode == 13){
-                    search();
-                }
+            mySpan.innerHTML = "取消";
+        } else {
+            //取消全选
+            for (var i = 0; i < allCheck.length; i++) {
+                allCheck[i].checked = false;
             }
-        </script> 
-  <script src="{% static 'laydate/laydate.js' %}"></script> 
-  <!-- 改成你的路径 --> 
-  <script>
-          lay('#version').html('-v'+ laydate.v);
-          //日期时间范围
-          laydate.render({
-            elem: '#test10'
-            ,type: 'datetime'
-            ,range: true
-          }); 
-        </script> 
-  <script type="text/javascript">
-    function out(){
-      flag = false
-      id_list = []
-        $.each($('input:checkbox'),function(){
-            if(this.checked){
+            mySpan.innerHTML = "全选";
+        }
+    }
+</script>
+<script type="text/javascript">
+    document.onkeydown = keyListener;
+
+    function keyListener(e) {
+        // 当按下回车键，执行我们的代码
+        if (e.keyCode == 13) {
+            search();
+        }
+    }
+</script>
+<script src="{% static 'laydate/laydate.js' %}"></script>
+<!-- 改成你的路径 -->
+<script>
+    lay('#version').html('-v' + laydate.v);
+    //日期时间范围
+    laydate.render({
+        elem: '#test10'
+        , type: 'datetime'
+        , range: true
+    });
+</script>
+<script type="text/javascript">
+    function out() {
+        flag = false
+        id_list = []
+        $.each($('input:checkbox'), function () {
+            if (this.checked) {
                 id = $(this).val()
                 id_list.push(id)
                 console.log(id_list)
@@ -378,175 +435,181 @@
             }
         });
 
-      var txt = $(".am-form-field").val();
-      var date_data=document.getElementById("test10");
-      date_range = date_data.value
+        var txt = $(".am-form-field").val();
+        var date_data = document.getElementById("test10");
+        date_range = date_data.value
 
-      if(date_range=="" && flag==false){
-        alert('请选择时间范围或自定义选中再导出!')
-        return
-      }else if(date_range!="" && flag==false){
-        $.post("/backstage/rules/export",
-          {
-              'date_range': date_range,
-              'csrfmiddlewaretoken': '{{csrf_token}}',
-          }
-        )
-        var form=$("<form>");
-        form.attr("style","display:none");
-        form.attr("method","get");
-        form.attr("action","/backstage/rules/export");
-        $("body").append(form);
-        form.submit();
-      }else if(date_range!="" && flag==true){
-        alert('请选择时间范围或自定义其中一项进行导出!')
-        return
-      }else if(date_range=="" && flag==true){
-        // alert('自定义导出!')
-        // alert(id_list)
-        // $.post("/backstage/rules/custom/export",
-        //   {
-        //       'id_list': id_list,
-        //       'csrfmiddlewaretoken': '{{csrf_token}}',
-        //       traditional:true,
-        //   }
-        // )
-        $.ajax({
-            cache: false,
-            type: "POST",
-            url: "/backstage/rules/custom/export",
-            traditional:true,  //加上此项可以传数组
-            dataType:'json',
-            async: false,
-            data:{'id_list':id_list},
-            success: function(data) {
-                if (data == 1) {
-                    alert('成功!')
-                }else if(data==0){
-                    alert('失败!')
+        if (date_range == "" && flag == false) {
+            alert('请选择时间范围或自定义选中再导出!')
+            return
+        } else if (date_range != "" && flag == false) {
+            $.post("/backstage/rules/export",
+                {
+                    'date_range': date_range,
+                    'csrfmiddlewaretoken': '{{csrf_token}}',
                 }
-            }
-        });
+            )
+            var form = $("<form>");
+            form.attr("style", "display:none");
+            form.attr("method", "get");
+            form.attr("action", "/backstage/rules/export");
+            $("body").append(form);
+            form.submit();
+        } else if (date_range != "" && flag == true) {
+            alert('请选择时间范围或自定义其中一项进行导出!')
+            return
+        } else if (date_range == "" && flag == true) {
+            // alert('自定义导出!')
+            // alert(id_list)
+            // $.post("/backstage/rules/custom/export",
+            //   {
+            //       'id_list': id_list,
+            //       'csrfmiddlewaretoken': '{{csrf_token}}',
+            //       traditional:true,
+            //   }
+            // )
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/backstage/rules/custom/export",
+                traditional: true,  //加上此项可以传数组
+                dataType: 'json',
+                async: false,
+                data: {'id_list': id_list},
+                success: function (data) {
+                    if (data == 1) {
+                        alert('成功!')
+                    } else if (data == 0) {
+                        alert('失败!')
+                    }
+                }
+            });
 
-        var form=$("<form>");
-        form.attr("style","display:none");
-        form.attr("method","get");
-        form.attr("action","/backstage/rules/custom/export");
-        $("body").append(form);
-        form.submit();
-      }
-    }
-
-  </script>
-  <script type="text/javascript">
-    function pcap_entry(title,id){
-      $.jq_Panel({
-            title: title,
-            iframeWidth: 400,
-            iframeHeight: 100,
-            url: "/backstage/upload/pcap"
-          }
-      )
-      $.post("/backstage/pcap/verify",
-        {
-            'csrfmiddlewaretoken': '{{csrf_token}}',
+            var form = $("<form>");
+            form.attr("style", "display:none");
+            form.attr("method", "get");
+            form.attr("action", "/backstage/rules/custom/export");
+            $("body").append(form);
+            form.submit();
         }
-      )
     }
-  </script>
-  <script type="text/javascript">
-                        //鼠标点击出现爱心特效
-        (function(window,document,undefined){
-            var hearts = [];
-            window.requestAnimationFrame = (function(){
-                return window.requestAnimationFrame ||
+
+</script>
+<script type="text/javascript">
+    function pcap_entry(title, id) {
+        $.jq_Panel({
+                title: title,
+                iframeWidth: 400,
+                iframeHeight: 100,
+                url: "/backstage/upload/pcap"
+            }
+        )
+        $.post("/backstage/pcap/verify",
+            {
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            }
+        )
+    }
+</script>
+<script type="text/javascript">
+    //鼠标点击出现爱心特效
+    (function (window, document, undefined) {
+        var hearts = [];
+        window.requestAnimationFrame = (function () {
+            return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function (callback){
-                    setTimeout(callback,1000/60);
+                function (callback) {
+                    setTimeout(callback, 1000 / 60);
                 }
-            })();
-            init();
-            function init(){
-                css(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
-                attachEvent();
-                gameloop();
-            }
-            function gameloop(){
-                for(var i=0;i<hearts.length;i++){
-                    if(hearts[i].alpha <=0){
-                        document.body.removeChild(hearts[i].el);
-                        hearts.splice(i,1);
-                        continue;
-                    }
-                    hearts[i].y--;
-                    hearts[i].scale += 0.004;
-                    hearts[i].alpha -= 0.013;
-                    hearts[i].el.style.cssText = "left:"+hearts[i].x+"px;top:"+hearts[i].y+"px;opacity:"+hearts[i].alpha+";transform:scale("+hearts[i].scale+","+hearts[i].scale+") rotate(45deg);background:"+hearts[i].color;
-                }
-                requestAnimationFrame(gameloop);
-            }
-            function attachEvent(){
-                var old = typeof window.onclick==="function" && window.onclick;
-                window.onclick = function(event){
-                    old && old();
-                    createHeart(event);
-                }
-            }
-            function createHeart(event){
-                var d = document.createElement("div");
-                d.className = "heart";
-                hearts.push({
-                    el : d,
-                    x : event.clientX - 5,
-                    y : event.clientY - 5,
-                    scale : 1,
-                    alpha : 1,
-                    color : randomColor()
-                });
-                document.body.appendChild(d);
-            }
-            function css(css){
-                var style = document.createElement("style");
-                style.type="text/css";
-                try{
-                    style.appendChild(document.createTextNode(css));
-                }catch(ex){
-                    style.styleSheet.cssText = css;
-                }
-                document.getElementsByTagName('head')[0].appendChild(style);
-            }
-            function randomColor(){
-                return "rgb("+(~~(Math.random()*255))+","+(~~(Math.random()*255))+","+(~~(Math.random()*255))+")";
-            }
-        })(window,document);
+        })();
+        init();
 
-        </script>  
-        <script type="text/javascript">
-            function local_in(title,id){
-              $.jq_Panel({
-                    title: title,
-                    iframeWidth: 400,
-                    iframeHeight: 100,
-                    url: "/backstage/upload/local"
-                  }
-              )
-              // // 进度显示
-              // $.jq_Panel({
-              //       title: title,
-              //       iframeWidth: 400,
-              //       iframeHeight: 100,
-              //       url: "/backstage/progress"
-              //     }
-              // )
-              $.post("/backstage/local/import",
-                {
-                    'csrfmiddlewaretoken': '{{csrf_token}}',
+        function init() {
+            css(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
+            attachEvent();
+            gameloop();
+        }
+
+        function gameloop() {
+            for (var i = 0; i < hearts.length; i++) {
+                if (hearts[i].alpha <= 0) {
+                    document.body.removeChild(hearts[i].el);
+                    hearts.splice(i, 1);
+                    continue;
                 }
-              )
+                hearts[i].y--;
+                hearts[i].scale += 0.004;
+                hearts[i].alpha -= 0.013;
+                hearts[i].el.style.cssText = "left:" + hearts[i].x + "px;top:" + hearts[i].y + "px;opacity:" + hearts[i].alpha + ";transform:scale(" + hearts[i].scale + "," + hearts[i].scale + ") rotate(45deg);background:" + hearts[i].color;
             }
-        </script>
- </body>
+            requestAnimationFrame(gameloop);
+        }
+
+        function attachEvent() {
+            var old = typeof window.onclick === "function" && window.onclick;
+            window.onclick = function (event) {
+                old && old();
+                createHeart(event);
+            }
+        }
+
+        function createHeart(event) {
+            var d = document.createElement("div");
+            d.className = "heart";
+            hearts.push({
+                el: d,
+                x: event.clientX - 5,
+                y: event.clientY - 5,
+                scale: 1,
+                alpha: 1,
+                color: randomColor()
+            });
+            document.body.appendChild(d);
+        }
+
+        function css(css) {
+            var style = document.createElement("style");
+            style.type = "text/css";
+            try {
+                style.appendChild(document.createTextNode(css));
+            } catch (ex) {
+                style.styleSheet.cssText = css;
+            }
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }
+
+        function randomColor() {
+            return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
+        }
+    })(window, document);
+
+</script>
+<script type="text/javascript">
+    function local_in(title, id) {
+        $.jq_Panel({
+                title: title,
+                iframeWidth: 400,
+                iframeHeight: 100,
+                url: "/backstage/upload/local"
+            }
+        )
+        // // 进度显示
+        // $.jq_Panel({
+        //       title: title,
+        //       iframeWidth: 400,
+        //       iframeHeight: 100,
+        //       url: "/backstage/progress"
+        //     }
+        // )
+        $.post("/backstage/local/import",
+            {
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            }
+        )
+    }
+</script>
+</body>
 </html>
