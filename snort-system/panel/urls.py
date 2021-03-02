@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from django.contrib import admin
 from views import *
 
-
+#待修改
 urlpatterns = patterns(
     '', url(r'^$', register, name='register'),
     url(r'^admin/', admin.site.urls),
