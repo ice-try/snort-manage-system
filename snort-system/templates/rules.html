@@ -128,8 +128,8 @@ a {text-decoration: none;color: red;}*/
                         <th nowrap="nowrap" class="table-download" style="color: green">下载</th>
                         <th nowrap="nowrap" class="table-delete" style="color: green">删除规则</th>
                         <th nowrap="nowrap" class="table-delete" style="color: green">删除pcap</th>
-                        <th nowrap="nowrap" class="table-detail" style="color: green">详情</th>
-                        <th nowrap="nowrap" class="table-detail" style="color: green">完整规则</th>
+                        <th nowrap="nowrap" class="table-detail" style="color: green">修改规则</th>
+                        <th nowrap="nowrap" class="table-detail" style="color: green">完整规则详情</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -151,9 +151,9 @@ a {text-decoration: none;color: red;}*/
                             <td><a href="javascript:void(0)"
                                    onclick="delete_pcap('pcap删除',5, '{{ rule.sid }}')">删除pcap</a></td>
                             <td><a href="javascript:void(0)"
-                                   onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{ rule.sid }}')">查看</a></td>
+                                   onclick="view('规则详情(绿:基本特征;蓝:扩展特征)',5,'{{ rule.sid }}')">修改</a></td>
                             <td><a href="javascript:void(0)"
-                                   onclick="view_complete('完整规则 '+'ID: '+'{{ rule.sid }}',5,'{{ rule.sid }}')">预览</a>
+                                   onclick="view_complete('完整规则 '+'ID: '+'{{ rule.sid }}',5,'{{ rule.sid }}')">详情预览</a>
                             </td>
                         </tr> {% endfor %}
                     </tbody>

@@ -485,7 +485,7 @@ def logout(request):
     ip = get_ip(request)
     username = request.session['user_name']
     record_log('无', '用户注销', username, '成功', ip, '用户成功注销')
-    request.session.flush()
+    request.session.flush()  # 清除session缓存
 
     return render_to_response('index.html')
 
@@ -764,14 +764,16 @@ def edit(request):
         old_features_dict = Rule.objects.filter(sid=str(data[0])).values()[0]
         # 将修改后内容插入数据库
         if (not is_str_null(data[Features.rev.value]) and not is_integer(data[Features.rev.value])) \
-                or (not is_str_null(data[Features.check_out_numbers.value]) and not is_integer(data[Features.check_out_numbers.value])) \
-                or (not is_str_null(data[Features.error_numbers.value]) and not is_integer(data[Features.error_numbers.value])):
+                or (not is_str_null(data[Features.check_out_numbers.value]) and not is_integer(
+            data[Features.check_out_numbers.value])) \
+                or (not is_str_null(data[Features.error_numbers.value]) and not is_integer(
+            data[Features.error_numbers.value])):
             return HttpResponse(5)
         else:
             if is_str_null(data[Features.rev.value]):
-                rev_value=1
+                rev_value = 1
             else:
-                rev_value=data[Features.rev.value]
+                rev_value = data[Features.rev.value]
             Rule.objects.filter(sid=data[Features.sid.value]).update(
                 msg=data[Features.msg.value],
                 reference=data[Features.reference.value],

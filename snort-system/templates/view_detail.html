@@ -180,6 +180,8 @@
                     success: function (data) {
                         if (data == 1) {
                             alert('规则修改成功!')
+                            window.history.back(-1);
+                            location.replace('/backstage/')
                         } else if (data == 0) {
                             alert('规则修改失败!')
                         } else if (data == 5) {
