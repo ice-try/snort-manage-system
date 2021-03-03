@@ -3,6 +3,7 @@ from models import *
 from django.http import HttpResponse
 from db import *
 from enum import Enum, unique
+from regex_utils import *
 
 
 @unique
@@ -10,27 +11,27 @@ class Features(Enum):
     """
     特征枚举
     """
-    sid = 0  			        # 规则ID
-    msg = 1  			        # 描述信息
-    reference = 2  		        # 引用信息
-    class_type = 3  		        # 类型
-    malname = 4  		        # 家族名
-    attacker = 5  		        # 攻击者
-    victim = 6  		        # 受害者
-    success_attack = 7  	        # 成功攻击
-    controller = 8  		        # 控制源
-    confirm_controlled = 9  	        # 确认被控
-    rev = 10  			        # 修订版本
-    knowledge_base = 11  	        # 知识库信息
-    shield = 12  		        # 是否屏蔽
-    contain = 13  		        # 出库包含
-    first_check_position = 14  	        # 首次检出位置
-    overall_first_check_position = 15  	# 整体首次检出位置
-    check_out_numbers = 16  	        # 检出个数
-    error_numbers = 17  	        # 误报个数
-    feature_source = 18  	        # 特征源
-    remarks = 19  		        # 备注
-    content = 20  		        # 匹配信息
+    sid = 0  # 规则ID
+    msg = 1  # 描述信息
+    reference = 2  # 引用信息
+    class_type = 3  # 类型
+    malname = 4  # 家族名
+    attacker = 5  # 攻击者
+    victim = 6  # 受害者
+    success_attack = 7  # 成功攻击
+    controller = 8  # 控制源
+    confirm_controlled = 9  # 确认被控
+    rev = 10  # 修订版本
+    knowledge_base = 11  # 知识库信息
+    shield = 12  # 是否屏蔽
+    contain = 13  # 出库包含
+    first_check_position = 14  # 首次检出位置
+    overall_first_check_position = 15  # 整体首次检出位置
+    check_out_numbers = 16  # 检出个数
+    error_numbers = 17  # 误报个数
+    feature_source = 18  # 特征源
+    remarks = 19  # 备注
+    content = 20  # 匹配信息
 
 
 def get_add_content():
@@ -140,9 +141,14 @@ def get_final_rule(request, sid):
     no_loop_key = ['protocol', 'src_ip', 'src_port', 'dst_ip', 'dst_port']
     receive_data, user = get_receive_data(request)
     try:
-        rule_str = 'alert ' + receive_data["protocol"] + ' ' + receive_data["src_ip"] + ' ' + receive_data[
-            "src_port"] + ' -> ' + \
-            receive_data["dst_ip"] + ' ' + receive_data["dst_port"] + ' ('
+        if not is_ip(receive_data["src_ip"]) or not is_ip(receive_data["dst_ip"]):
+            return "6", receive_data, user
+        elif not is_port(receive_data["src_port"]) or not is_port(receive_data["dst_port"]):
+            return "5", receive_data, user
+        else:
+            rule_str = 'alert ' + receive_data["protocol"] + ' ' + receive_data["src_ip"] + ' ' + receive_data[
+                "src_port"] + ' -> ' + \
+                       receive_data["dst_ip"] + ' ' + receive_data["dst_port"] + ' ('
     except Exception as e:
         print 'error:', e
         return HttpResponse(0)
@@ -153,6 +159,11 @@ def get_final_rule(request, sid):
             sub_rule = sub_rule + key + ':"' + val + '";'
         elif key == "content":
             sub_rule = sub_rule + val
+        elif key == "rev":
+            if is_integer(val):
+                sub_rule = sub_rule + key + ':' + val + ';'
+            else:
+                return "5", receive_data, user
         else:
             sub_rule = sub_rule + key + ':' + val + ';'
     final_rule = rule_str + sub_rule + 'sid:' + str(sid) + ';'

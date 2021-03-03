@@ -671,8 +671,14 @@ def add_submit(request):
     final_rule, receive_data, user = get_final_rule(request, sid)
     # 规则验证
     new_rule_path = get_pcap_path() + 'new.rules'
-    with open(new_rule_path, 'w')as f:
-        f.write(final_rule + '\n')
+    print final_rule
+    if final_rule == "5":
+        return HttpResponse(5)
+    elif final_rule == "6":
+        return HttpResponse(6)
+    else:
+        with open(new_rule_path, 'w')as f:
+            f.write(final_rule + '\n')
     if len(get_another_content_list()) == 0:
         return HttpResponse(3)
     if not rules_verify(new_rule_path):
