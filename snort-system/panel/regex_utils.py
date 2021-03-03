@@ -38,3 +38,9 @@ def is_port(port):
         port_flag = False
     return port_flag
 
+
+def is_str_null(s):
+    str_flag = False
+    if s is None or s == "":
+        str_flag = True
+    return str_flag

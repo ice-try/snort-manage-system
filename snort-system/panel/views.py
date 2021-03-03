@@ -763,40 +763,50 @@ def edit(request):
         # 记录修改之前的特征
         old_features_dict = Rule.objects.filter(sid=str(data[0])).values()[0]
         # 将修改后内容插入数据库
-        Rule.objects.filter(sid=data[Features.sid.value]).update(
-            msg=data[Features.msg.value],
-            reference=data[Features.reference.value],
-            class_type=data[Features.class_type.value],
-            malname=data[Features.malname.value],
-            attacker=data[Features.attacker.value],
-            victim=data[Features.victim.value],
-            success_attack=data[Features.success_attack.value],
-            controller=data[Features.controller.value],
-            confirm_controlled=data[Features.confirm_controlled.value],
-            rev=str(int(data[Features.rev.value]) + 1),
-            knowledge_base=data[Features.knowledge_base.value],
-            shield=data[Features.shield.value],
-            contain=data[Features.contain.value],
-            first_check_position=data[Features.first_check_position.value],
-            overall_first_check_position=data[Features.overall_first_check_position.value],
-            check_out_numbers=data[Features.check_out_numbers.value],
-            error_numbers=data[Features.error_numbers.value],
-            feature_source=data[Features.feature_source.value],
-            remarks=data[Features.remarks.value],
-            content=data[Features.content.value],
-            update_time=get_date())
-
-        if flag == 'conflict_flag':
-            record_log(data[0], '冲突解决', user, '成功', ip, '自动更新发生冲突解决')
-            Rule.objects.filter(sid=data[0]).update(has_conflict='否')
-            if len(get_edited_rule_id()) != 0:
-                get_edited_rule_id().remove(data[0])
-            UpdateRule.objects.get(sid=data[0]).delete()
+        if (not is_str_null(data[Features.rev.value]) and not is_integer(data[Features.rev.value])) \
+                or (not is_str_null(data[Features.check_out_numbers.value]) and not is_integer(data[Features.check_out_numbers.value])) \
+                or (not is_str_null(data[Features.error_numbers.value]) and not is_integer(data[Features.error_numbers.value])):
+            return HttpResponse(5)
         else:
-            pass
-        compare(old_features_dict, data, user, ip)
-        synchro(data, user, ip)
-        return HttpResponse(1)
+            if is_str_null(data[Features.rev.value]):
+                rev_value=1
+            else:
+                rev_value=data[Features.rev.value]
+            Rule.objects.filter(sid=data[Features.sid.value]).update(
+                msg=data[Features.msg.value],
+                reference=data[Features.reference.value],
+                class_type=data[Features.class_type.value],
+                malname=data[Features.malname.value],
+                attacker=data[Features.attacker.value],
+                victim=data[Features.victim.value],
+                success_attack=data[Features.success_attack.value],
+                controller=data[Features.controller.value],
+                confirm_controlled=data[Features.confirm_controlled.value],
+                # rev=str(int(data[Features.rev.value]) + 1),
+                rev=str(int(rev_value) + 1),
+                knowledge_base=data[Features.knowledge_base.value],
+                shield=data[Features.shield.value],
+                contain=data[Features.contain.value],
+                first_check_position=data[Features.first_check_position.value],
+                overall_first_check_position=data[Features.overall_first_check_position.value],
+                check_out_numbers=data[Features.check_out_numbers.value],
+                error_numbers=data[Features.error_numbers.value],
+                feature_source=data[Features.feature_source.value],
+                remarks=data[Features.remarks.value],
+                content=data[Features.content.value],
+                update_time=get_date())
+
+            if flag == 'conflict_flag':
+                record_log(data[0], '冲突解决', user, '成功', ip, '自动更新发生冲突解决')
+                Rule.objects.filter(sid=data[0]).update(has_conflict='否')
+                if len(get_edited_rule_id()) != 0:
+                    get_edited_rule_id().remove(data[0])
+                UpdateRule.objects.get(sid=data[0]).delete()
+            else:
+                pass
+            compare(old_features_dict, data, user, ip)
+            synchro(data, user, ip)
+            return HttpResponse(1)
     return HttpResponse(0)
 
 
