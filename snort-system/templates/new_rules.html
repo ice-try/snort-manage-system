@@ -34,11 +34,11 @@
     </tr>
     <tr>
         <td style="color: green"><font></font>dst_ip:</td>
-        <td><input type="text" name="dst_ip" style="width: 300px ;color: green" id="dst_ip"/></td>
+        <td><input type="text" name="dst_ip"  style="width: 300px ;color: green" id="dst_ip"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>dst_port:</td>
-        <td><input type="text" name="dst_port" style="width: 300px ;color: green" id="dst_port"/></td>
+        <td><input type="text" name="dst_port"  style="width: 300px ;color: green" id="dst_port"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>msg:</td>
@@ -82,7 +82,7 @@
     </tr>
     <tr>
         <td style="color: green"><font></font>rev:</td>
-        <td><input type="text" name="rev" style="width: 300px ;color: green" id="rev"/></td>
+        <td><input type="text" name="rev"  style="width: 300px ;color: green" id="rev"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>classtype:</td>
@@ -97,6 +97,84 @@
 </table>
 <script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'myplugs/js/plugs.js' %}"></script>
+
+<!--校验用户输入-->
+<script type="text/javascript">
+    //校验是否是数字
+    function check_num(id, flag) {
+        var input = ""
+        if (flag === 0) {
+            input = get_input_val(id)
+        } else {
+            input = id
+        }
+        var reg = new RegExp(/^[1-9]d*|0$/);
+        var check_flag = true
+        if (input != null && input !== "") {
+            if (isNaN(input) || !reg.test(input)) {
+                //alert('修订版本/检出个数/误报个数只能是等于或大于0的整数!')
+                if (flag === 0) {
+                    document.getElementById(id).value = null
+                }
+                check_flag = false
+            }
+        }
+        return check_flag
+    }
+</script>
+
+<script type="text/javascript">
+    //校验数字是否在指定范围
+    function check_range(num, max, min) {
+        if (typeof num == "string") {
+            Number(num)
+        }
+        var max_flag = true
+        var min_flag = true
+        if (max != null) {
+            if (num > max) {
+                max_flag = false
+            }
+        }
+        if (min != null) {
+            if (num < min) {
+                min_flag = false
+            }
+        }
+        return (max_flag && min_flag)
+    }
+</script>
+
+<script type="text/javascript">
+    //校验是否是合法端口号
+    function check_port(id) {
+        var port = get_input_val(id)
+        var port_flag = true
+        if (!check_num(id, 0) || !check_range(port, 65535, 0)) {
+            port_flag = false
+        }
+        return port_flag
+    }
+</script>
+
+<script type="text/javascript">
+    //校验是否是合法ip
+    function check_ip(id) {
+        var ip = get_input_val(id)
+        var ip_list = []
+        ip_list = ip.split('.')
+        if (ip_list.length !== 4) {
+            return false
+        }
+        for (var i; i < 4; i++) {
+            if (!check_num(ip_list[i], 1) || !check_range(ip_list[i], 255, 0)) {
+                return false
+            }
+        }
+        return true
+    }
+</script>
+
 <!-- 获取input值 -->
 <script type="text/javascript">
     function add() {
@@ -132,7 +210,18 @@
                 delete data_dict[key]
             }
         }
-        $.post("/backstage/rules/add_submit", {
+        if(!check_ip('src_ip')||!check_ip('dst_ip')){
+           alert("ip不合法！")
+           return
+        }
+        else if (!check_port('src_port')||!check_port('dst_port')){
+            alert("port只能是0~65535的整数！")
+            return
+        }else if (!check_num('rev',0)){
+            alert("rev只能是大于或等于0的整数！")
+            return
+        }else {
+            $.post("/backstage/rules/add_submit", {
             'data': JSON.stringify(data_dict),
             'csrfmiddlewaretoken': '{{csrf_token}}'
         }, function (data) {
@@ -153,6 +242,7 @@
                 alert('ip格式不正确!')
             }
         });
+        }
     }
 </script>
 <script type="text/javascript">
