@@ -144,8 +144,6 @@ a {text-decoration: none;color: red;}*/
                             <td width="100px">{{ rule.rev }}</td>
                             <td width="160px">{{ rule.create_time }}</td>
                             <td>{{ rule.update_time }}</td>
-                           <!-- <td nowrap="nowrap" width="50px"><a href="javascript:void(0)"
-                                   onclick="check_rule('规则检测',5,'{{ rule.sid }}')">检测</a> </td>-->
                             <td><a href="javascript:void(0)"
                                    onclick="download_pcap('pcap下载',5, '{{ rule.sid }}')">下载</a></td>
                             <td><a href="javascript:delete_rules('规则删除',5, '{{ rule.sid }}')"
@@ -161,6 +159,9 @@ a {text-decoration: none;color: red;}*/
                     </tbody>
                 </table>
                 <hr/>
+                <div style="display: none;">
+                    <input id="next" type="text" name="next_url" value="{{ next_url }}"/>
+                </div>
                 <!-- 分页开始 -->
                 <div>
                     <ul class="pagination">
@@ -354,12 +355,13 @@ a {text-decoration: none;color: red;}*/
             success: function (data) {
                 if (data == 1) {
                     alert("删除成功")
-                    {#    重新获取列表信息#}
+                    alert(data)
+                    window.location.reload();
                 } else
-                    alert("删除失败!!!")
+                    alert("删除失败")
             },
             error: function () {
-                alert("异常");
+                alert("该条规则不存在");
             }
         })
     }

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView
@@ -493,7 +493,7 @@ def logout(request):
 @csrf_exempt
 def detail_show(request):
     """
-    :describe:  查看规则详情
+    :describe:  查看规则详情(详情)
     :param      http请求
     :return:    特征详情界面及其包含的数据
     """
@@ -507,7 +507,7 @@ def detail_show(request):
 @csrf_exempt
 def complete_show(request):
     """
-    :describe:  查看完整规则
+    :describe:  查看完整规则(预览)
     :param      http请求
     :return:    完整规则界面及其包含的数据
     """
@@ -1095,6 +1095,7 @@ def rules_delete(request):
     :return:    响应状态: 成功 失败
     """
     sid = request.POST.get('sid')
+    # next_href = request.POST.get('next_href')
     print "调用rules_delete方法"
 
     if sid is not None:
@@ -1106,6 +1107,7 @@ def rules_delete(request):
     if yid is not None:
         Rule.objects.filter(sid=sid).delete()
         print "该规则删除成功"
+        # response = redirect(next_href)
         return HttpResponse(1)
     else:
         print "该规则不存在"
