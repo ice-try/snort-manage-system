@@ -24,12 +24,12 @@ class GetHitRule(object):
         try:
             with open(os.path.join(self.result_path, 'fast.log')) as f:
                 self.result_list = f.readlines()
-                print self.result_list
+                # print self.result_list
         except IOError as e:
             print 'error:', e
         if len(self.result_list) > 0:
             self.result = self.result_list
-            print self.result
+            # print self.result
         else:
             pass
 
@@ -46,9 +46,9 @@ class GetHitRule(object):
         for i in range(len(self.result)):
             hit_result = self.result[i].split('[**]')[1]
             hit_rule_id = hit_result.split(']')[0].split(':')[1]
-            print hit_rule_id
+            # print hit_rule_id
             hit_rule_name = hit_result.split(']')[1].strip()
-            print hit_rule_name
+            # print hit_rule_name
             hit_dict = {hit_rule_id: hit_rule_name}
             hit_list.append(hit_dict)
             sid_list.append(hit_rule_id)
@@ -84,7 +84,7 @@ class GetHitRule(object):
         """
         if not os.path.exists(self.result_path):
             get_file_cmd = 'mkdir -p ' + self.result_path
-            print get_file_cmd
+            # print get_file_cmd
             os.system(get_file_cmd)
 
     def del_result_file(self):

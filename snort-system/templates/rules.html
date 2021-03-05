@@ -82,7 +82,7 @@ a {text-decoration: none;color: red;}*/
                             class="am-icon-download"></span> 导出
                     </button>
                 </div>
-                <div class="am-btn-group am-btn-group-xs">
+                <div class="am-btn-group-btn-group-xs">
                     <button type="button" class="am-btn am-btn-default" onclick="pcap_entry('查找命中的规则',5)"><span
                             class="am-icon-upload"></span> pcap验证
                     </button>
@@ -125,6 +125,7 @@ a {text-decoration: none;color: red;}*/
                         <th nowrap="nowrap" class="table-type" style="color: green">修订版本</th>
                         <th nowrap="nowrap" class="table-date am-hide-sm-only" style="color: green">创建时间</th>
                         <th nowrap="nowrap" class="table-set" style="color: green">修改时间</th>
+                        <th nowrap="nowrap" class="table-check" style="color: green">检测</th>
                         <th nowrap="nowrap" class="table-download" style="color: green">下载</th>
                         <th nowrap="nowrap" class="table-delete" style="color: green">删除规则</th>
                         <th nowrap="nowrap" class="table-delete" style="color: green">删除pcap</th>
@@ -144,6 +145,9 @@ a {text-decoration: none;color: red;}*/
                             <td width="100px">{{ rule.rev }}</td>
                             <td width="160px">{{ rule.create_time }}</td>
                             <td>{{ rule.update_time }}</td>
+                            <td nowrap="nowrap" width="50px"><a href="javascript:void(0)"
+                                                                onclick="check_rule('规则',5,'{{ rule.sid }}')">检测</a>
+                            </td>
                             <td><a href="javascript:void(0)"
                                    onclick="download_pcap('pcap下载',5, '{{ rule.sid }}')">下载</a></td>
                             <td><a href="javascript:delete_rules('规则删除',5, '{{ rule.sid }}')"

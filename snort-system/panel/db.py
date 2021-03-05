@@ -205,7 +205,7 @@ def db_to_file():
         complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
         # 开始写
         stor_path = get_stor_path()
-        print stor_path
+        # print stor_path
         if not os.path.exists(stor_path):
             os.makedirs(stor_path)
         with open(stor_path + '/all.rules', 'a+') as f:
@@ -239,7 +239,7 @@ def db_to_rule_file():
     """
     set_default_env()
     rule_obj = Rule.objects.filter()
-    print rule_obj
+    # print rule_obj
     for rule in rule_obj:
         complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
         # 开始写
@@ -369,7 +369,6 @@ def syn_rev(data, user, ip):
     result = ""
     rule_obj = CompleteRule.objects.get(sid=data[0])
     old_rev = re.findall(r"rev:(.+?);", str(rule_obj.rule))
-
     try:
         if len(old_rev) == 0:
             result = rule_obj.rule + 'rev:' + data[10] + ';'

@@ -671,7 +671,7 @@ def add_submit(request):
     final_rule, receive_data, user = get_final_rule(request, sid)
     # 规则验证
     new_rule_path = get_pcap_path() + 'new.rules'
-    print final_rule
+    # print final_rule
     if final_rule == "5":
         return HttpResponse(5)
     elif final_rule == "6":
