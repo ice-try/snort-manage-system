@@ -34,11 +34,11 @@
     </tr>
     <tr>
         <td style="color: green"><font></font>dst_ip:</td>
-        <td><input type="text" name="dst_ip"  style="width: 300px ;color: green" id="dst_ip"/></td>
+        <td><input type="text" name="dst_ip" style="width: 300px ;color: green" id="dst_ip"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>dst_port:</td>
-        <td><input type="text" name="dst_port"  style="width: 300px ;color: green" id="dst_port"/></td>
+        <td><input type="text" name="dst_port" style="width: 300px ;color: green" id="dst_port"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>msg:</td>
@@ -82,7 +82,7 @@
     </tr>
     <tr>
         <td style="color: green"><font></font>rev:</td>
-        <td><input type="text" name="rev"  style="width: 300px ;color: green" id="rev"/></td>
+        <td><input type="text" name="rev" style="width: 300px ;color: green" id="rev"/></td>
     </tr>
     <tr>
         <td style="color: green"><font></font>classtype:</td>
@@ -210,38 +210,36 @@
                 delete data_dict[key]
             }
         }
-        if(!check_ip('src_ip')||!check_ip('dst_ip')){
-           alert("ip不合法！")
-           return
-        }
-        else if (!check_port('src_port')||!check_port('dst_port')){
+        if (!check_ip('src_ip') || !check_ip('dst_ip')) {
+            alert("ip不合法！")
+            return
+        } else if (!check_port('src_port') || !check_port('dst_port')) {
             alert("port只能是0~65535的整数！")
             return
-        }else if (!check_num('rev',0)){
+        } else if (!check_num('rev', 0)) {
             alert("rev只能是大于或等于0的整数！")
             return
-        }else {
+        } else {
             $.post("/backstage/rules/add_submit", {
-            'data': JSON.stringify(data_dict),
-            'csrfmiddlewaretoken': '{{csrf_token}}'
-        }, function (data) {
-            if (data == 1) {
-                alert("规则支持,添加成功!")
-                window.history.back(-1);
-            } else if (data == 0) {
-                alert('规则添加失败!')
-            } else if (data == 2) {
-                alert('系统不支持此规则!')
-            } else if (data == 3) {
-                alert('请先点击添加content再提交!')
-            } else if (data == 4) {
-                alert('未填写任何内容!')
-            } else if (data == 5) {
-                alert('src_port/dst_port/rev只能是等于或大于0的整数!')
-            } else if (data == 6) {
-                alert('ip格式不正确!')
-            }
-        });
+                'data': JSON.stringify(data_dict),
+                'csrfmiddlewaretoken': '{{csrf_token}}'
+            }, function (data) {
+                if (data == 1) {
+                    alert("规则支持,添加成功!")
+                } else if (data == 0) {
+                    alert('规则添加失败!')
+                } else if (data == 2) {
+                    alert('系统不支持此规则!')
+                } else if (data == 3) {
+                    alert('请先点击添加content再提交!')
+                } else if (data == 4) {
+                    alert('未填写任何内容!')
+                } else if (data == 5) {
+                    alert('src_port/dst_port/rev只能是等于或大于0的整数!')
+                } else if (data == 6) {
+                    alert('ip格式不正确!')
+                }
+            });
         }
     }
 </script>

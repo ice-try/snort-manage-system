@@ -469,6 +469,7 @@ def login(request):
         request.session['is_login'] = True
         request.session['user_name'] = username
         record_log('无', '用户登录', username, '成功', ip, '用户成功登陆')
+        request.session.set_expiry(3600)
         return HttpResponse(1)
     else:
         return HttpResponse(0)
