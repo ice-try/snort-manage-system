@@ -150,6 +150,9 @@
     function check_port(id) {
         var port = get_input_val(id)
         var port_flag = true
+        if (port==="any"){
+            return true
+        }
         if (!check_num(id, 0) || !check_range(port, 65535, 0)) {
             port_flag = false
         }
@@ -162,6 +165,9 @@
     function check_ip(id) {
         var ip = get_input_val(id)
         var ip_list = []
+        if (ip==="any"){
+            return true
+        }
         ip_list = ip.split('.')
         if (ip_list.length !== 4) {
             return false
@@ -214,7 +220,7 @@
             alert("ip不合法！")
             return
         } else if (!check_port('src_port') || !check_port('dst_port')) {
-            alert("port只能是0~65535的整数！")
+            alert("port只能是any或0~65535的整数！")
             return
         } else if (!check_num('rev', 0)) {
             alert("rev只能是大于或等于0的整数！")
