@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-
 from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -17,6 +16,8 @@ from other import *
 from stor import *
 from custom_export import *
 import json
+import os
+from config import *
 
 
 # Create your views here.
@@ -1243,11 +1244,17 @@ def upload_local_rule(request, rule_path):
     if not str(myFile).endswith('.rules'):
         return_str = "文件格式错误"
         return return_str, ""
-
     destination = open(os.path.join(rule_path, myFile.name), 'wb+')
     for chunk in myFile.chunks():
         destination.write(chunk)
     destination.close()
+    tool_path = get_tool_path()
+    # print(tool_path)
+    # print(myFile.name)
+    if str(myFile.name).startswith("nznids"):
+        cmd='python '+os.path.join(tool_path,'ruleFormat.py')+' fromZnids '+ os.path.join(rule_path, myFile.name) +' '+ os.path.join(rule_path, myFile.name)
+        # print(cmd)
+        os.system(cmd)
     return return_str
 
 
