@@ -4,6 +4,18 @@
 import os
 import ConfigParser
 
+def get_tool_path():
+    """
+        :describe:  获得tool存储路径
+        :param:     无
+        :return:    tool存储路径
+        """
+    path = os.getcwd() + '/panel/config.ini'
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    tool_path = cf.get('tool', 'tool_path')
+    return tool_path
+
 
 def get_suricata_yaml_path():
     """

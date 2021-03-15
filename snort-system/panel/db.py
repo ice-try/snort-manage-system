@@ -48,7 +48,8 @@ def get_dict():
             dict_data = json.load(fp)
     except IOError:
         dict_data = None
-        print 'Open names file failed!'
+        print
+        'Open names file failed!'
 
     return dict_data
 
@@ -115,7 +116,7 @@ def insert(dict_data):
     """
     rules = Rule.objects.all()
     rule_sid = [str(rule.sid) for rule in rules]
-
+    exist_sid = []
     for key, value in dict_data.items():
         if key not in rule_sid:
             val = get_reference(value)
@@ -142,7 +143,9 @@ def insert(dict_data):
             rule_obj.save()
 
         else:
+            exist_sid.append(key.encode('utf-8'))
             continue
+    return exist_sid
 
 
 def get_rule_files():

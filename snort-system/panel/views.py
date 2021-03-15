@@ -1252,7 +1252,9 @@ def upload_local_rule(request, rule_path):
     # print(tool_path)
     # print(myFile.name)
     if str(myFile.name).startswith("nznids"):
-        cmd='python '+os.path.join(tool_path,'ruleFormat.py')+' fromZnids '+ os.path.join(rule_path, myFile.name) +' '+ os.path.join(rule_path, myFile.name)
+        cmd = 'python ' + os.path.join(tool_path, 'ruleFormat.py') + ' fromZnids ' + os.path.join(rule_path,
+                                                                                                  myFile.name) + ' ' + os.path.join(
+            rule_path, myFile.name)
         # print(cmd)
         os.system(cmd)
     return return_str
@@ -1327,7 +1329,11 @@ def import_local_rule(request):
         print 'Open names file failed!'
 
     local_rules_in(rule_path)
-    insert(dict_data)
+    exist_sid = insert(dict_data)
     remove_cmd = 'rm -rf ' + rule_path
     os.system(remove_cmd)
-    return StreamingHttpResponse('上传成功!')
+    if exist_sid is None or len(exist_sid) == 0:
+        return StreamingHttpResponse('上传成功!')
+    else:
+        tip = '规则sid%s' % exist_sid + '重复! 对应规则上传失败!'
+        return StreamingHttpResponse(tip)
