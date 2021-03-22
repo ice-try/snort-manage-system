@@ -4,6 +4,7 @@
 from config import *
 from global_values import *
 from models import *
+from django.db import transaction
 
 import os
 import re
@@ -108,6 +109,7 @@ def get_reference(value):
     return val
 
 
+@transaction.commit_manually
 def insert(dict_data):
     """
     :describe:  将规则特征写入数据库
@@ -119,6 +121,7 @@ def insert(dict_data):
     exist_sid = []
     for key, value in dict_data.items():
         if key not in rule_sid:
+            print 'rule in: ' + key
             val = get_reference(value)
             content_str = get_content(key)
 
@@ -143,8 +146,10 @@ def insert(dict_data):
             rule_obj.save()
 
         else:
+            print 'rule not in: ' + key
             exist_sid.append(key.encode('utf-8'))
             continue
+    transaction.commit()
     return exist_sid
 
 
