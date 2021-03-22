@@ -330,20 +330,41 @@ a {text-decoration: none;color: red;}*/
 </script>
 <script type="text/javascript">
     function delete_pcap(title, id, sid) {
+        if (confirm("是否删除？")) {
+            $.ajax({
+                url: "/backstage/delete/pcap",
+                type: "POST",
+                data: {
+                    'sid': sid,
+                    'csrfmiddlewaretoken': '{{csrf_token}}'
+                },
+                success: function (data) {
+                    if (data == 1) {
+                        alert("删除成功")
+                        window.location.reload();
+                    } else
+                        alert("该规则无命中的pcap")
+                },
+                error: function () {
+                    alert("删除异常");
+                }
+            })
+        }
 
-        $.jq_Panel({
-            title: title,
-            iframeWidth: 400,
-            iframeHeight: 100,
-            url: "/backstage/delete_pcap"
-        });
 
-        $.post("/backstage/delete/pcap",
-            {
-                'sid': sid,
-                'csrfmiddlewaretoken': '{{csrf_token}}',
-            }
-        )
+        //  $.jq_Panel({
+        //     title: title,
+        //     iframeWidth: 400,
+        //    iframeHeight: 100,
+        //  url: "/backstage/delete_pcap"
+        //  });
+
+        //    $.post("/backstage/delete/pcap",
+        //      {
+        //          'sid': sid,
+        //       'csrfmiddlewaretoken': '{{csrf_token}}',
+        //    }
+        // )
 
     }
 </script>

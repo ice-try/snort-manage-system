@@ -18,6 +18,7 @@ from custom_export import *
 import json
 import os
 from config import *
+from db import *
 
 
 # Create your views here.
@@ -1079,7 +1080,7 @@ def pcap_delete(request):
     :return:    响应状态: 成功 未命中(不包含此规则pcap)
     """
     sid = request.POST.get('sid')
-
+    set_pcap("")
     if sid is not None:
         set_del_id(sid)
 
@@ -1088,17 +1089,21 @@ def pcap_delete(request):
     if len(rules) != 0:
         for rule in rules:
             if rule.sid == get_del_id():
+                print rule.pcap
                 set_pcap(rule.pcap)
                 break
 
+    print "pcap===" + get_pcap()
     if get_pcap() == "":
-        return HttpResponse('该规则无命中的pcap')
+        # return HttpResponse('该规则无命中的pcap')
+        return HttpResponse(0)
 
     cmd = 'rm -rf ./data/pcaps/' + get_pcap()
     os.system(cmd)
+    print "delete pcap"
     RulePcap.objects.filter(sid=get_del_id()).delete()
 
-    return HttpResponse('删除成功')
+    return HttpResponse(1)
 
 
 @csrf_exempt
@@ -1171,7 +1176,8 @@ def get_xlsx(request):
     try:
         file = open(xlsx_path, 'rb')
     except Exception as e:
-        print e
+        print
+        e
         return HttpResponse('xlsx文件打开失败')
 
     response = StreamingHttpResponse(file)
@@ -1180,8 +1186,7 @@ def get_xlsx(request):
     user = request.session['user_name']
     ip = get_ip(request)
     set_default_env()
-    record_log('无', '表格导出', user, '成功', ip,
-               '导出文件为rules.xlsx,下载路径为%s' % (xlsx_path))
+    record_log('无', '表格导出', user, '成功', ip, '导出文件为rules.xlsx,下载路径为%s' % (xlsx_path))
 
     return response
 
@@ -1327,13 +1332,14 @@ def import_local_rule(request):
     except IOError:
         dict_data = None
         print 'Open names file failed!'
-
+        return HttpResponse('Open names file failed!')
     local_rules_in(rule_path)
     exist_sid = insert(dict_data)
     remove_cmd = 'rm -rf ' + rule_path
     os.system(remove_cmd)
+    print exist_sid
     if exist_sid is None or len(exist_sid) == 0:
         return StreamingHttpResponse('上传成功!')
     else:
-        tip = '规则sid%s' % exist_sid + '重复! 对应规则上传失败!'
+        tip = '规则sid %s' % exist_sid + '重复! 对应规则上传失败！'
         return StreamingHttpResponse(tip)
