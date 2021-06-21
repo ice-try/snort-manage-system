@@ -1125,6 +1125,7 @@ def rules_delete(request):
 
     if yid is not None:
         Rule.objects.filter(sid=sid).delete()
+        CompleteRule.objects.filter(sid=sid).delete()
         print "该规则删除成功"
         # response = redirect(next_href)
         return HttpResponse(1)
@@ -1299,7 +1300,7 @@ def local_rules_in(path):
 
     for key, value in rules_sections.items():
         if key not in complete_sid:
-            rule_obj = CompleteRule.objects.create(sid=key, rule=value)
+            rule_obj = CompleteRule.objects.create(sid=key, rule=value, update_time=get_date())
             rule_obj.save()
         else:
             # 判断冲突

@@ -4,6 +4,71 @@
 import os
 import ConfigParser
 
+
+def get_rule_from_db(cur_path, sub_num):
+    """
+        :describe:  获得json格式规则的导出路径，当调用该方法的文件与当前文件不在同一个目录下时使用
+        :param:     cur_path是当前所在目录，sub_num是当前目录相对于当前目录的上级目录需要返回多少层
+        :return:    json格式规则的导出路径
+        """
+    print "from_db"
+    sub_str = ""
+    if sub_num > 0:
+        sub_str = ".."
+        for i in range(sub_num - 1):
+            sub_str += "/.."
+    dir_path = os.path.abspath(os.path.join(cur_path, sub_str))
+    path = dir_path + '/panel/config.ini'
+    print path
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    from_db = cf.get('db', 'from_db')
+    print from_db
+    return from_db
+
+
+def get_rule_json(cur_path, sub_num):
+    """
+        :describe:  获得json格式规则的导出路径，当调用该方法的文件与当前文件不在同一个目录下时使用
+        :param:     cur_path是当前所在目录，sub_num是当前目录相对于当前目录的上级目录需要返回多少层
+        :return:    json格式规则的导出路径
+        """
+    print "rule_json"
+    sub_str = ""
+    if sub_num > 0:
+        sub_str = ".."
+        for i in range(sub_num - 1):
+            sub_str += "/.."
+    dir_path = os.path.abspath(os.path.join(cur_path, sub_str))
+    path = dir_path + '/panel/config.ini'
+    print path
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    rule_json = cf.get('export', 'rule_json')
+    print rule_json
+    return rule_json
+
+
+def from_other_get_tool_path(cur_path, sub_num):
+    """
+        :describe:  获得tool存储路径，当调用该方法的文件与当前文件不在同一个目录下时使用
+        :param:     cur_path是当前所在目录，sub_num是当前目录相对于当前目录的上级目录需要返回多少层
+        :return:    tool存储路径
+        """
+    sub_str = ""
+    if sub_num > 0:
+        sub_str = ".."
+        for i in range(sub_num - 1):
+            sub_str += "/.."
+    dir_path = os.path.abspath(os.path.join(cur_path, sub_str))
+    path = dir_path + '/panel/config.ini'
+    print path
+    cf = ConfigParser.ConfigParser()
+    cf.read(path)
+    tool_path = cf.get('tool', 'tool_path')
+    return tool_path
+
+
 def get_tool_path():
     """
         :describe:  获得tool存储路径

@@ -184,7 +184,8 @@ def syn_new_rule(sid, new_rule, user, ip):
     :return:        True:同步成功 False:同步失败
     """
     try:
-        rule_obj = CompleteRule.objects.create(sid=str(sid), rule=new_rule)
+        print "in CompleteRule"
+        rule_obj = CompleteRule.objects.create(sid=str(sid), rule=new_rule, update_time=get_date())
         rule_obj.save()
         record_log(str(sid), '新增规则', user, '成功', ip, '成功新增一条snort规则并且规则成功入库')
         return True

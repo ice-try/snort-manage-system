@@ -1,16 +1,17 @@
 # -*- coding: UTF-8 -*-
-
-
+import os
+import sys
 from config import *
 from global_values import *
+
+sys.path.append("../snort")
+if not os.environ.get('DJANGO_SETTINGS_MODULE'):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'snort.settings')
 from models import *
 from django.db import transaction
-
-import os
 import re
 import json
 import time
-import sys
 
 
 def set_default_env():
@@ -239,7 +240,7 @@ def db_to_rule_file():
             f.write(complete_rule + '\n')
 
 
-def db_to_rule_file():
+def newer_db_to_rule_file(outpath):
     """
     :describe:  将出库包含的规则写入文件
     :param:     无
@@ -250,11 +251,7 @@ def db_to_rule_file():
     # print rule_obj
     for rule in rule_obj:
         complete_rule = CompleteRule.objects.get(sid=rule.sid).rule
-        # 开始写
-        suricata_rule_path = get_suricata_rule_path()
-        if not os.path.exists(suricata_rule_path):
-            os.makedirs(suricata_rule_path)
-        with open(os.path.join(suricata_rule_path, 'all.rules'), 'a+') as f:
+        with open(outpath, 'a+') as f:
             f.write(complete_rule + '\n')
 
 
@@ -532,6 +529,31 @@ def syn_sid(data, user, ip):
         record_log(rule_obj.sid, '规则修改同步sid', user, '失败', ip, '错误信息: %s' % (e))
 
 
+def sys_update_time(data, user, ip):
+    """
+    :describe:      同步修改时间到规则
+    :param param1:  前端返回数据
+    :param param2:  当前登录用户
+    :return:        无
+    """
+    rule_obj = CompleteRule.objects.get(sid=str(data[0]))
+    # old_time = re.findall(r"updated_at (.+?);", str(rule_obj.rule))
+    old_time = re.search(r"updated_at (.+?);", str(rule_obj.rule))
+    # print "old_time==="+old_time
+    if old_time is not None:
+        print "old_time==%s" % old_time.group()
+        try:
+            new_time = get_YMD()
+            print "new_time===" + new_time
+            result = rule_obj.rule.replace(old_time.group(), "updated_at " + new_time + ";")
+            rule_obj.rule = result
+            rule_obj.save()
+            CompleteRule.objects.filter(sid=str(data[0])).update(update_time=get_date())
+        except Exception as e:
+            record_log(rule_obj.sid, '规则修改同步时间', user, '失败', ip,
+                       '错误信息:%s,原update_at字段为%s,新update_at字段为%s' % (e, old_time, new_time))
+
+
 def synchro(data, user, ip):
     """
     :describe:      同步修改后特征内容到规则
@@ -546,6 +568,7 @@ def synchro(data, user, ip):
     syn_shield_flag(data, user, ip)
     syn_reference(data, user, ip)
     syn_sid(data, user, ip)
+    sys_update_time(data, user, ip)
 
 
 def record_log(sid, act, per, statu, ip, message):
@@ -593,4 +616,15 @@ def get_date():
     """
     ts = time.time()
     date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))
+    return date
+
+
+def get_YMD():
+    """
+        :describe: 获取实时日期
+        :param:    无
+        :return:   当前日期,格式为yyyy_mm_dd
+        """
+    ts = time.time()
+    date = time.strftime('%Y_%m_%d', time.localtime(ts))
     return date

@@ -69,6 +69,7 @@ class CompleteRule(models.Model):
     """
     sid = models.CharField(unique=True, max_length=10, verbose_name='规则ID')
     rule = models.CharField(max_length=500, verbose_name='完整规则')
+    update_time = models.CharField(max_length=20, verbose_name='规则最新时间')
 
 
 class Log(models.Model):
